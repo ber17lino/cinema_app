@@ -1,0 +1,16 @@
+C:\Users\ber17\source\repos\Cinema_APP\Cinema_APP\obj\Debug\Cinema_APP.csproj.AssemblyReference.cache
+C:\Users\ber17\source\repos\Cinema_APP\Cinema_APP\obj\Debug\Cinema_APP.MainForm.resources
+C:\Users\ber17\source\repos\Cinema_APP\Cinema_APP\obj\Debug\Cinema_APP.Properties.Resources.resources
+C:\Users\ber17\source\repos\Cinema_APP\Cinema_APP\obj\Debug\Cinema_APP.TableForm.resources
+C:\Users\ber17\source\repos\Cinema_APP\Cinema_APP\obj\Debug\Cinema_APP.csproj.GenerateResource.cache
+C:\Users\ber17\source\repos\Cinema_APP\Cinema_APP\obj\Debug\Cinema_APP.csproj.CoreCompileInputs.cache
+C:\Users\ber17\source\repos\Cinema_APP\Cinema_APP\bin\Debug\Properties\my_db_cinema.db
+C:\Users\ber17\source\repos\Cinema_APP\Cinema_APP\bin\Debug\Cinema_APP.exe.config
+C:\Users\ber17\source\repos\Cinema_APP\Cinema_APP\bin\Debug\Cinema_APP.exe
+C:\Users\ber17\source\repos\Cinema_APP\Cinema_APP\bin\Debug\Cinema_APP.pdb
+C:\Users\ber17\source\repos\Cinema_APP\Cinema_APP\bin\Debug\System.Data.SQLite.dll
+C:\Users\ber17\source\repos\Cinema_APP\Cinema_APP\obj\Debug\Cinema_APP.csproj.Up2Date
+C:\Users\ber17\source\repos\Cinema_APP\Cinema_APP\obj\Debug\Cinema_APP.exe
+C:\Users\ber17\source\repos\Cinema_APP\Cinema_APP\obj\Debug\Cinema_APP.pdb
+C:\Users\ber17\source\repos\Cinema_APP\Cinema_APP\bin\Debug\System.Data.SQLite.xml
+C:\Users\ber17\source\repos\Cinema_APP\Cinema_APP\obj\Debug\Cinema_APP.exe.config
