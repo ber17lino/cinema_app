@@ -13,13 +13,14 @@
             base.Dispose(disposing);
         }
 
+        #region Windows Form Designer generated code
+
         private void InitializeComponent()
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.подключитьсяКБДToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.закрытьСоединениеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.сменитьПользователяToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.выходToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.таблицыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,6 +54,7 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonОтчётWord = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonОтчётExcel = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonОтчётPDF = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
@@ -71,7 +73,8 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.MdiWindowListItem = this.окноToolStripMenuItem;
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1000, 28);
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
+            this.menuStrip1.Size = new System.Drawing.Size(1067, 28);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -80,7 +83,6 @@
             this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.подключитьсяКБДToolStripMenuItem,
             this.закрытьСоединениеToolStripMenuItem,
-            this.сменитьПользователяToolStripMenuItem,
             this.toolStripSeparator1,
             this.выходToolStripMenuItem});
             this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
@@ -100,13 +102,6 @@
             this.закрытьСоединениеToolStripMenuItem.Size = new System.Drawing.Size(237, 26);
             this.закрытьСоединениеToolStripMenuItem.Text = "Закрыть соединение";
             this.закрытьСоединениеToolStripMenuItem.Click += new System.EventHandler(this.закрытьСоединениеToolStripMenuItem_Click);
-            // 
-            // сменитьПользователяToolStripMenuItem
-            // 
-            this.сменитьПользователяToolStripMenuItem.Name = "сменитьПользователяToolStripMenuItem";
-            this.сменитьПользователяToolStripMenuItem.Size = new System.Drawing.Size(237, 26);
-            this.сменитьПользователяToolStripMenuItem.Text = "Сменить пользователя";
-            this.сменитьПользователяToolStripMenuItem.Click += new System.EventHandler(this.сменитьПользователяToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
@@ -302,55 +297,62 @@
             this.toolStripButtonМеста,
             this.toolStripSeparator3,
             this.toolStripButtonОтчётWord,
-            this.toolStripButtonОтчётExcel});
+            this.toolStripButtonОтчётExcel,
+            this.toolStripButtonОтчётPDF});
             this.toolStrip1.Location = new System.Drawing.Point(0, 28);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1000, 27);
+            this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
+            this.toolStrip1.Size = new System.Drawing.Size(1067, 27);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
             // toolStripButtonФильмы
             // 
             this.toolStripButtonФильмы.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonФильмы.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.toolStripButtonФильмы.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonФильмы.Name = "toolStripButtonФильмы";
-            this.toolStripButtonФильмы.Size = new System.Drawing.Size(71, 24);
+            this.toolStripButtonФильмы.Size = new System.Drawing.Size(65, 24);
             this.toolStripButtonФильмы.Text = "Фильмы";
             this.toolStripButtonФильмы.Click += new System.EventHandler(this.toolStripButtonФильмы_Click);
             // 
             // toolStripButtonЗалы
             // 
             this.toolStripButtonЗалы.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonЗалы.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.toolStripButtonЗалы.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonЗалы.Name = "toolStripButtonЗалы";
-            this.toolStripButtonЗалы.Size = new System.Drawing.Size(48, 24);
+            this.toolStripButtonЗалы.Size = new System.Drawing.Size(45, 24);
             this.toolStripButtonЗалы.Text = "Залы";
             this.toolStripButtonЗалы.Click += new System.EventHandler(this.toolStripButtonЗалы_Click);
             // 
             // toolStripButtonСеансы
             // 
             this.toolStripButtonСеансы.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonСеансы.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.toolStripButtonСеансы.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonСеансы.Name = "toolStripButtonСеансы";
-            this.toolStripButtonСеансы.Size = new System.Drawing.Size(65, 24);
+            this.toolStripButtonСеансы.Size = new System.Drawing.Size(63, 24);
             this.toolStripButtonСеансы.Text = "Сеансы";
             this.toolStripButtonСеансы.Click += new System.EventHandler(this.toolStripButtonСеансы_Click);
             // 
             // toolStripButtonБилеты
             // 
             this.toolStripButtonБилеты.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonБилеты.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.toolStripButtonБилеты.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonБилеты.Name = "toolStripButtonБилеты";
-            this.toolStripButtonБилеты.Size = new System.Drawing.Size(64, 24);
+            this.toolStripButtonБилеты.Size = new System.Drawing.Size(62, 24);
             this.toolStripButtonБилеты.Text = "Билеты";
             this.toolStripButtonБилеты.Click += new System.EventHandler(this.toolStripButtonБилеты_Click);
             // 
             // toolStripButtonМеста
             // 
             this.toolStripButtonМеста.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonМеста.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.toolStripButtonМеста.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonМеста.Name = "toolStripButtonМеста";
-            this.toolStripButtonМеста.Size = new System.Drawing.Size(56, 24);
+            this.toolStripButtonМеста.Size = new System.Drawing.Size(55, 24);
             this.toolStripButtonМеста.Text = "Места";
             this.toolStripButtonМеста.Click += new System.EventHandler(this.toolStripButtonМеста_Click);
             // 
@@ -362,29 +364,42 @@
             // toolStripButtonОтчётWord
             // 
             this.toolStripButtonОтчётWord.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonОтчётWord.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.toolStripButtonОтчётWord.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonОтчётWord.Name = "toolStripButtonОтчётWord";
-            this.toolStripButtonОтчётWord.Size = new System.Drawing.Size(102, 24);
+            this.toolStripButtonОтчётWord.Size = new System.Drawing.Size(99, 24);
             this.toolStripButtonОтчётWord.Text = "Отчёт (Word)";
             this.toolStripButtonОтчётWord.Click += new System.EventHandler(this.toolStripButtonОтчётWord_Click);
             // 
             // toolStripButtonОтчётExcel
             // 
             this.toolStripButtonОтчётExcel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonОтчётExcel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.toolStripButtonОтчётExcel.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonОтчётExcel.Name = "toolStripButtonОтчётExcel";
-            this.toolStripButtonОтчётExcel.Size = new System.Drawing.Size(100, 24);
+            this.toolStripButtonОтчётExcel.Size = new System.Drawing.Size(97, 24);
             this.toolStripButtonОтчётExcel.Text = "Отчёт (Excel)";
             this.toolStripButtonОтчётExcel.Click += new System.EventHandler(this.toolStripButtonОтчётExcel_Click);
+            // 
+            // toolStripButtonОтчётPDF
+            // 
+            this.toolStripButtonОтчётPDF.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonОтчётPDF.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.toolStripButtonОтчётPDF.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonОтчётPDF.Name = "toolStripButtonОтчётPDF";
+            this.toolStripButtonОтчётPDF.Size = new System.Drawing.Size(89, 24);
+            this.toolStripButtonОтчётPDF.Text = "Отчёт (PDF)";
+            this.toolStripButtonОтчётPDF.Click += new System.EventHandler(this.toolStripButtonОтчётPDF_Click);
             // 
             // statusStrip1
             // 
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 295);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 532);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1000, 26);
+            this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
+            this.statusStrip1.Size = new System.Drawing.Size(1067, 26);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -398,12 +413,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1000, 321);
+            this.ClientSize = new System.Drawing.Size(1067, 558);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip1);
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "MainForm";
             this.Text = "Кинотеатр: Управление";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
@@ -415,13 +431,15 @@
             this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
+
+        #endregion
 
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem подключитьсяКБДToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem закрытьСоединениеToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem сменитьПользователяToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem выходToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem таблицыToolStripMenuItem;
@@ -455,6 +473,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripButton toolStripButtonОтчётWord;
         private System.Windows.Forms.ToolStripButton toolStripButtonОтчётExcel;
+        private System.Windows.Forms.ToolStripButton toolStripButtonОтчётPDF;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel statusLabel;
     }

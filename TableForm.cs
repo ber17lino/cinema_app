@@ -21,43 +21,23 @@ namespace Cinema_APP
             _query = query;
             _mainForm = mainForm;
             this.Text = "Данные таблицы: " + tableName;
-
-            // Устанавливаем MDI родителя
             this.MdiParent = mainForm;
 
-            // Настройка прав доступа в зависимости от роли
-            ConfigureAccessByRole();
+            // Настройка кнопок в зависимости от таблицы
+            if (TableName.ToLower() == "билеты")
+            {
+                btnAdd.Text = "Оформить билет";
+                btnEdit.Visible = false; // Скрываем редактирование
+                btnDelete.Text = "Отменить билет";
+            }
+            else
+            {
+                btnAdd.Enabled = true;
+                btnEdit.Enabled = true;
+                btnDelete.Enabled = true;
+            }
 
             LoadData();
-        }
-
-        private void ConfigureAccessByRole()
-        {
-            var role = Program.CurrentUserRole;
-
-            switch (role)
-            {
-                case UserRole.Administrator:
-                    // Администратор имеет полный доступ ко всем операциям
-                    btnAdd.Enabled = true;
-                    btnEdit.Enabled = true;
-                    btnDelete.Enabled = true;
-                    break;
-
-                case UserRole.Cashier:
-                    // Кассир может только просматривать данные
-                    btnAdd.Enabled = false;
-                    btnEdit.Enabled = false;
-                    btnDelete.Enabled = false;
-                    break;
-
-                case UserRole.Guest:
-                    // Гость может только просматривать данные
-                    btnAdd.Enabled = false;
-                    btnEdit.Enabled = false;
-                    btnDelete.Enabled = false;
-                    break;
-            }
         }
 
         private void LoadData()
@@ -68,15 +48,11 @@ namespace Cinema_APP
                 {
                     conn.Open();
                     _dataTable = new DataTable();
-
                     _adapter = new SQLiteDataAdapter(_query, conn);
                     var commandBuilder = new SQLiteCommandBuilder(_adapter);
                     _adapter.Fill(_dataTable);
-
                     dgvData.DataSource = _dataTable;
                     ConfigureGridView();
-
-                    // Обновляем статус в главной форме
                     _mainForm.UpdateStatus($"Загружено {_dataTable.Rows.Count} записей из {TableName}");
                 }
             }
@@ -90,17 +66,14 @@ namespace Cinema_APP
 
         private void ConfigureGridView()
         {
-            // Скрываем технические ID столбцы
             foreach (DataGridViewColumn column in dgvData.Columns)
             {
                 if (column.Name.StartsWith("ID_") || column.Name.Contains("_id"))
                     column.Visible = false;
             }
 
-            // Настройка ширины столбцов
             dgvData.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-            // Устанавливаем читабельные заголовки
             foreach (DataGridViewColumn column in dgvData.Columns)
             {
                 column.HeaderText = GetColumnName(column.HeaderText);
@@ -120,18 +93,15 @@ namespace Cinema_APP
                 case "start_datetime": return "Начало сеанса";
                 case "end_datetime": return "Конец сеанса";
                 case "final_price": return "Цена билета";
-                case "ticket_status": return "Статус билета";
+                case "ticket_status": return "Статус";
                 case "purchase_date": return "Дата покупки";
-                case "genre_name": return "Название жанра";
+                case "genre_name": return "Жанр";
                 case "restriction_name": return "Возрастное ограничение";
                 case "type_name": return "Тип экрана";
                 case "markup": return "Наценка";
                 case "category_name": return "Категория места";
-                case "row_start": return "Начальный ряд";
-                case "row_end": return "Конечный ряд";
-                case "base_price": return "Базовая цена";
-                case "row_number": return "Номер ряда";
-                case "seat_number": return "Номер места";
+                case "row_number": return "Ряд";
+                case "seat_number": return "Место";
                 default: return englishName;
             }
         }
@@ -140,7 +110,6 @@ namespace Cinema_APP
         {
             if (dgvData.CurrentRow != null && dgvData.CurrentRow.Index >= 0)
             {
-                // Ищем первую колонку с ID
                 foreach (DataGridViewColumn column in dgvData.Columns)
                 {
                     if (column.Name.StartsWith("ID_") && dgvData.CurrentRow.Cells[column.Name].Value != null)
@@ -156,18 +125,21 @@ namespace Cinema_APP
         {
             try
             {
-                // Проверка прав доступа
-                if (Program.CurrentUserRole != UserRole.Administrator)
+                if (TableName.ToLower() == "билеты")
                 {
-                    MessageBox.Show("Добавление записей доступно только администраторам.", "Ошибка доступа",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
+                    var form = new TicketSaleForm();
+                    if (form.ShowDialog() == DialogResult.OK)
+                    {
+                        LoadData();
+                    }
                 }
-
-                Form editForm = GetEditForm(null);
-                if (editForm != null && editForm.ShowDialog() == DialogResult.OK)
+                else
                 {
-                    LoadData(); // Обновляем данные после добавления
+                    Form editForm = GetEditForm(null);
+                    if (editForm != null && editForm.ShowDialog() == DialogResult.OK)
+                    {
+                        LoadData();
+                    }
                 }
             }
             catch (Exception ex)
@@ -179,16 +151,15 @@ namespace Cinema_APP
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
+            // Этот метод не должен вызываться для "Билеты", но на всякий случай:
+            if (TableName.ToLower() == "билеты")
+            {
+                MessageBox.Show("Редактирование билетов запрещено. Используйте отмену.", "Информация");
+                return;
+            }
+
             try
             {
-                // Проверка прав доступа
-                if (Program.CurrentUserRole != UserRole.Administrator)
-                {
-                    MessageBox.Show("Редактирование записей доступно только администраторам.", "Ошибка доступа",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
                 int id = GetSelectedId();
                 if (id == -1)
                 {
@@ -196,11 +167,10 @@ namespace Cinema_APP
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-
                 Form editForm = GetEditForm(id);
                 if (editForm != null && editForm.ShowDialog() == DialogResult.OK)
                 {
-                    LoadData(); // Обновляем данные после редактирования
+                    LoadData();
                 }
             }
             catch (Exception ex)
@@ -214,14 +184,6 @@ namespace Cinema_APP
         {
             try
             {
-                // Проверка прав доступа
-                if (Program.CurrentUserRole != UserRole.Administrator)
-                {
-                    MessageBox.Show("Удаление записей доступно только администраторам.", "Ошибка доступа",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
                 int id = GetSelectedId();
                 if (id == -1)
                 {
@@ -230,15 +192,61 @@ namespace Cinema_APP
                     return;
                 }
 
-                if (MessageBox.Show("Вы уверены, что хотите удалить выбранную запись?", "Подтверждение удаления",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (TableName.ToLower() == "билеты")
                 {
-                    DeleteRecord(id);
+                    // Отмена билета: меняем статус на 0
+                    if (MessageBox.Show("Вы уверены, что хотите отменить этот билет?\nМесто станет доступным для продажи.", "Подтверждение отмены",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        CancelTicket(id);
+                    }
+                }
+                else
+                {
+                    // Обычное удаление
+                    if (MessageBox.Show("Вы уверены, что хотите удалить выбранную запись?", "Подтверждение удаления",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        DeleteRecord(id);
+                    }
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Ошибка при удалении: {ex.Message}", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void CancelTicket(int ticketId)
+        {
+            try
+            {
+                using (var conn = DbHelper.GetConnection())
+                {
+                    conn.Open();
+                    string query = "UPDATE Tickets SET Ticket_status = 0 WHERE ID_ticket = @id";
+                    using (var cmd = new SQLiteCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", ticketId);
+                        int rowsAffected = cmd.ExecuteNonQuery();
+                        if (rowsAffected > 0)
+                        {
+                            MessageBox.Show("Билет успешно отменён!", "Успех",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            LoadData();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Не удалось отменить билет. Возможно, он уже отменён.", "Ошибка",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при отмене билета: {ex.Message}", "Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -250,27 +258,22 @@ namespace Cinema_APP
                 using (var conn = DbHelper.GetConnection())
                 {
                     conn.Open();
-
-                    // Определяем имя ID колонки и таблицы для запроса DELETE
                     string idColumnName = GetIdColumnName();
                     string tableName = GetTableNameForDelete();
-
                     string query = $"DELETE FROM {tableName} WHERE {idColumnName} = @id";
-
                     using (var cmd = new SQLiteCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@id", id);
                         int rowsAffected = cmd.ExecuteNonQuery();
-
                         if (rowsAffected > 0)
                         {
                             MessageBox.Show("Запись успешно удалена!", "Успех",
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            LoadData(); // Обновляем данные
+                            LoadData();
                         }
                         else
                         {
-                            MessageBox.Show("Не удалось удалить запись. Возможно, она уже была удалена.", "Ошибка",
+                            MessageBox.Show("Не удалось удалить запись.", "Ошибка",
                                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         }
                     }
@@ -280,7 +283,7 @@ namespace Cinema_APP
             {
                 if (ex.Message.Contains("FOREIGN KEY constraint failed"))
                 {
-                    MessageBox.Show("Нельзя удалить запись, так как на нее есть ссылки в других таблицах!", "Ошибка",
+                    MessageBox.Show("Нельзя удалить запись: на неё есть ссылки в других таблицах!", "Ошибка",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else
@@ -348,7 +351,7 @@ namespace Cinema_APP
                     case "сеансы":
                         return new SessionForm(id);
                     case "билеты":
-                        MessageBox.Show("Для работы с билетами используйте специализированную форму продажи билетов.", "Информация");
+                        // Не должно вызываться — редактирование скрыто
                         break;
                     default:
                         MessageBox.Show($"Редактирование для таблицы '{TableName}' не реализовано.", "Информация");
@@ -357,9 +360,8 @@ namespace Cinema_APP
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при создании формы редактирования: {ex.Message}", "Ошибка");
+                MessageBox.Show($"Ошибка при создании формы: {ex.Message}", "Ошибка");
             }
-
             return null;
         }
 
@@ -374,19 +376,15 @@ namespace Cinema_APP
                 }
                 else
                 {
-                    // Ищем во всех видимых столбцах
                     var filterExpression = "";
                     var visibleColumns = dgvData.Columns.Cast<DataGridViewColumn>()
                         .Where(c => c.Visible);
-
                     foreach (var column in visibleColumns)
                     {
                         if (!string.IsNullOrEmpty(filterExpression))
                             filterExpression += " OR ";
-
                         filterExpression += $"[{column.DataPropertyName}] LIKE '%{filter}%'";
                     }
-
                     _dataTable.DefaultView.RowFilter = filterExpression;
                 }
             }

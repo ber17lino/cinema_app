@@ -14,82 +14,8 @@ namespace Cinema_APP
             InitializeComponent();
             statusLabel.Text = "БД не подключена";
 
-            // Настройка прав доступа в зависимости от роли
-            ConfigureAccessByRole();
-
             // Автоматическое подключение к БД при запуске
             AutoConnectToDatabase();
-        }
-
-        private void ConfigureAccessByRole()
-        {
-            var role = Program.CurrentUserRole;
-
-            switch (role)
-            {
-                case UserRole.Administrator:
-                    UpdateStatus("Режим: Администратор");
-                    // Администратор имеет полный доступ ко всем функциям
-                    файлToolStripMenuItem.Enabled = true;
-                    таблицыToolStripMenuItem.Enabled = true;
-                    отчётыToolStripMenuItem.Enabled = true;
-                    toolStrip1.Enabled = true;
-                    закрытьСоединениеToolStripMenuItem.Enabled = true;
-                    подключитьсяКБДToolStripMenuItem.Enabled = true;
-                    справочникиToolStripMenuItem.Visible = true;
-
-                    // Включить все кнопки на панели инструментов
-                    toolStripButtonФильмы.Enabled = true;
-                    toolStripButtonЗалы.Enabled = true;
-                    toolStripButtonСеансы.Enabled = true;
-                    toolStripButtonБилеты.Enabled = true;
-                    toolStripButtonМеста.Enabled = true;
-                    toolStripButtonОтчётWord.Enabled = true;
-                    toolStripButtonОтчётExcel.Enabled = true;
-                    break;
-
-                case UserRole.Cashier:
-                    UpdateStatus("Режим: Кассир");
-                    // Кассир может просматривать таблицы, но не может генерировать отчеты и управлять подключением
-                    файлToolStripMenuItem.Enabled = true;
-                    таблицыToolStripMenuItem.Enabled = true;
-                    отчётыToolStripMenuItem.Enabled = false;
-                    toolStrip1.Enabled = true;
-                    закрытьСоединениеToolStripMenuItem.Enabled = false;
-                    подключитьсяКБДToolStripMenuItem.Enabled = true;
-                    справочникиToolStripMenuItem.Visible = false;
-
-                    // Кассир может просматривать основные таблицы
-                    toolStripButtonФильмы.Enabled = true;
-                    toolStripButtonЗалы.Enabled = true;
-                    toolStripButtonСеансы.Enabled = true;
-                    toolStripButtonБилеты.Enabled = true;
-                    toolStripButtonМеста.Enabled = true;
-                    toolStripButtonОтчётWord.Enabled = false;
-                    toolStripButtonОтчётExcel.Enabled = false;
-                    break;
-
-                case UserRole.Guest:
-                    UpdateStatus("Режим: Гость");
-                    // Гость может только просматривать основные таблицы
-                    файлToolStripMenuItem.Enabled = true; // Разрешаем файл для смены пользователя
-                    таблицыToolStripMenuItem.Enabled = true; // Разрешаем просмотр таблиц
-                    отчётыToolStripMenuItem.Enabled = false;
-                    toolStrip1.Enabled = false; // Отключаем панель инструментов
-                    закрытьСоединениеToolStripMenuItem.Enabled = false;
-                    подключитьсяКБДToolStripMenuItem.Enabled = false;
-                    справочникиToolStripMenuItem.Visible = false; // Скрываем справочники для гостя
-
-                    // Отключаем все кнопки на панели инструментов
-                    toolStripButtonФильмы.Enabled = false;
-                    toolStripButtonЗалы.Enabled = false;
-                    toolStripButtonСеансы.Enabled = false;
-                    toolStripButtonБилеты.Enabled = false;
-                    toolStripButtonМеста.Enabled = false;
-                    toolStripButtonОтчётWord.Enabled = false;
-                    toolStripButtonОтчётExcel.Enabled = false;
-                    break;
-            }
         }
 
         private void AutoConnectToDatabase()
@@ -98,7 +24,7 @@ namespace Cinema_APP
             {
                 _connection = DbHelper.GetConnection();
                 _connection.Open();
-                UpdateStatus($"Подключено к БД ({Program.CurrentUserRole})");
+                UpdateStatus("Подключено к БД");
                 UpdateMenuAvailability(true);
             }
             catch (Exception ex)
@@ -132,43 +58,22 @@ namespace Cinema_APP
                 return;
             }
 
-            var role = Program.CurrentUserRole;
+            таблицыToolStripMenuItem.Enabled = isConnected;
+            отчётыToolStripMenuItem.Enabled = isConnected;
+            toolStrip1.Enabled = isConnected;
 
-            if (role == UserRole.Guest)
-            {
-                // Для гостя включаем только основные таблицы
-                таблицыToolStripMenuItem.Enabled = isConnected;
-                отчётыToolStripMenuItem.Enabled = false;
-                toolStrip1.Enabled = false;
-            }
-            else
-            {
-                bool canAccessTables = isConnected;
-                bool canAccessReports = isConnected && role == UserRole.Administrator;
-
-                таблицыToolStripMenuItem.Enabled = canAccessTables;
-                отчётыToolStripMenuItem.Enabled = canAccessReports;
-                toolStrip1.Enabled = canAccessTables;
-
-                toolStripButtonФильмы.Enabled = canAccessTables;
-                toolStripButtonЗалы.Enabled = canAccessTables;
-                toolStripButtonСеансы.Enabled = canAccessTables;
-                toolStripButtonБилеты.Enabled = canAccessTables;
-                toolStripButtonМеста.Enabled = canAccessTables;
-                toolStripButtonОтчётWord.Enabled = canAccessReports;
-                toolStripButtonОтчётExcel.Enabled = canAccessReports;
-            }
+            toolStripButtonФильмы.Enabled = isConnected;
+            toolStripButtonЗалы.Enabled = isConnected;
+            toolStripButtonСеансы.Enabled = isConnected;
+            toolStripButtonБилеты.Enabled = isConnected;
+            toolStripButtonМеста.Enabled = isConnected;
+            toolStripButtonОтчётWord.Enabled = isConnected;
+            toolStripButtonОтчётExcel.Enabled = isConnected;
+            toolStripButtonОтчётPDF.Enabled = isConnected;
         }
 
         private void подключитьсяКБДToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Program.CurrentUserRole == UserRole.Guest)
-            {
-                MessageBox.Show("Подключение к БД недоступно в режиме гостя.",
-                    "Ошибка доступа", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
             try
             {
                 if (_connection != null && _connection.State == System.Data.ConnectionState.Open)
@@ -180,7 +85,7 @@ namespace Cinema_APP
 
                 _connection = DbHelper.GetConnection();
                 _connection.Open();
-                UpdateStatus($"Подключено к БД ({Program.CurrentUserRole})");
+                UpdateStatus("Подключено к БД");
                 UpdateMenuAvailability(true);
 
                 MessageBox.Show("Подключение к базе данных успешно установлено!", "Успех",
@@ -197,13 +102,6 @@ namespace Cinema_APP
 
         private void закрытьСоединениеToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Program.CurrentUserRole != UserRole.Administrator)
-            {
-                MessageBox.Show("Закрытие соединения доступно только администраторам.",
-                    "Ошибка доступа", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
             try
             {
                 if (_connection != null && _connection.State == System.Data.ConnectionState.Open)
@@ -218,7 +116,7 @@ namespace Cinema_APP
                     UpdateStatus("Соединение с БД закрыто");
                     UpdateMenuAvailability(false);
 
-                    MessageBox.Show("Соединение с базой данных закрыто.", "Информация",
+                    MessageBox.Show("Соединение с базе данных закрыто.", "Информация",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
@@ -241,39 +139,6 @@ namespace Cinema_APP
                 _connection.Close();
             }
             Application.Exit();
-        }
-
-        private void сменитьПользователяToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (MessageBox.Show("Вы уверены, что хотите сменить пользователя?", "Смена пользователя",
-                MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                if (_connection != null && _connection.State == System.Data.ConnectionState.Open)
-                {
-                    _connection.Close();
-                }
-
-                foreach (Form child in this.MdiChildren)
-                {
-                    child.Close();
-                }
-
-                this.Hide();
-                using (var loginForm = new LoginForm())
-                {
-                    if (loginForm.ShowDialog() == DialogResult.OK)
-                    {
-                        Program.CurrentUserRole = loginForm.SelectedRole;
-                        this.Show();
-                        ConfigureAccessByRole();
-                        AutoConnectToDatabase();
-                    }
-                    else
-                    {
-                        Application.Exit();
-                    }
-                }
-            }
         }
 
         // === Таблицы → Основные ===
@@ -300,12 +165,12 @@ namespace Cinema_APP
         private void билетыToolStripMenuItem_Click(object sender, EventArgs e)
             => OpenTable("Билеты", @"SELECT t.ID_ticket, t.Final_price, t.Purchase_date, 
                                     t.Ticket_status, m.Movie_name, h.Hall_name, 
-                                    s.Row_number, s.Seat_number 
+                                    seat.Row_number, seat.Seat_number 
                                     FROM Tickets t 
                                     JOIN Sessions s ON t.ID_session = s.ID_session 
                                     JOIN Movies m ON s.ID_movie = m.ID_movie 
                                     JOIN Halls h ON s.ID_hall = h.ID_hall 
-                                    JOIN Seats s ON t.ID_seat = s.ID_seat");
+                                    JOIN Seats seat ON t.ID_seat = seat.ID_seat");
 
         private void местаToolStripMenuItem_Click(object sender, EventArgs e)
             => OpenTable("Места", @"SELECT s.ID_seat, s.Row_number, s.Seat_number, 
@@ -329,18 +194,6 @@ namespace Cinema_APP
 
         private void OpenTable(string tableName, string query)
         {
-            // Для гостя ограничиваем доступ только к основным таблицам
-            if (Program.CurrentUserRole == UserRole.Guest)
-            {
-                string[] allowedTablesForGuest = { "фильмы", "залы", "сеансы", "билеты", "места" };
-                if (!allowedTablesForGuest.Contains(tableName.ToLower()))
-                {
-                    MessageBox.Show("Просмотр этой таблицы недоступен в режиме гостя.",
-                        "Ошибка доступа", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-            }
-
             if (_connection == null || _connection.State != System.Data.ConnectionState.Open)
             {
                 MessageBox.Show("Сначала подключитесь к базе данных!", "Ошибка",
@@ -379,33 +232,98 @@ namespace Cinema_APP
         private void toolStripButtonСеансы_Click(object sender, EventArgs e) => сеансыToolStripMenuItem_Click(sender, e);
         private void toolStripButtonБилеты_Click(object sender, EventArgs e) => билетыToolStripMenuItem_Click(sender, e);
         private void toolStripButtonМеста_Click(object sender, EventArgs e) => местаToolStripMenuItem_Click(sender, e);
-        private void toolStripButtonОтчётWord_Click(object sender, EventArgs e) => вWordToolStripMenuItem_Click(sender, e);
-        private void toolStripButtonОтчётExcel_Click(object sender, EventArgs e) => вExcelToolStripMenuItem_Click(sender, e);
+
+        // === Обработчики для кнопок отчетов на панели инструментов ===
+        private void toolStripButtonОтчётWord_Click(object sender, EventArgs e)
+        {
+            if (CheckDatabaseConnection())
+            {
+                ReportsManager.GenerateHallsAndSeatsReport();
+            }
+        }
+
+        private void toolStripButtonОтчётExcel_Click(object sender, EventArgs e)
+        {
+            if (CheckDatabaseConnection())
+            {
+                ShowFinancialReportDialog();
+            }
+        }
+
+        private void toolStripButtonОтчётPDF_Click(object sender, EventArgs e)
+        {
+            if (CheckDatabaseConnection())
+            {
+                ReportsManager.GenerateWeeklyScheduleReport();
+            }
+        }
 
         // === Отчёты ===
-        private void вWordToolStripMenuItem_Click(object sender, EventArgs e) => OpenReport("Word");
-        private void вExcelToolStripMenuItem_Click(object sender, EventArgs e) => OpenReport("Excel");
-        private void вPDFToolStripMenuItem_Click(object sender, EventArgs e) => OpenReport("PDF");
-
-        private void OpenReport(string format)
+        private void вWordToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Program.CurrentUserRole != UserRole.Administrator)
+            if (CheckDatabaseConnection())
             {
-                MessageBox.Show("Генерация отчетов доступна только администраторам.",
-                    "Ошибка доступа", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                ReportsManager.GenerateHallsAndSeatsReport();
             }
+        }
 
+        private void вExcelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (CheckDatabaseConnection())
+            {
+                ShowFinancialReportDialog();
+            }
+        }
+
+        private void вPDFToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (CheckDatabaseConnection())
+            {
+                ReportsManager.GenerateWeeklyScheduleReport();
+            }
+        }
+
+        // === Вспомогательные методы для отчетов ===
+        private bool CheckDatabaseConnection()
+        {
             if (_connection == null || _connection.State != System.Data.ConnectionState.Open)
             {
                 MessageBox.Show("Сначала подключитесь к базе данных!", "Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                return false;
             }
+            return true;
+        }
 
-            MessageBox.Show($"Формирование отчёта в {format} пока не реализовано.\n\n" +
-                "Эта функция будет доступна в следующей версии приложения.", "Информация",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+        private void ShowFinancialReportDialog()
+        {
+            var result = MessageBox.Show("Сформировать отчет за последние 30 дней или выбрать период?",
+                "Финансовый отчет",
+                MessageBoxButtons.YesNoCancel,
+                MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                // Отчет за последние 30 дней
+                ReportsManager.GenerateFinancialReport();
+            }
+            else if (result == DialogResult.No)
+            {
+                // Выбор периода
+                ShowDateRangeDialog();
+            }
+            // Если Cancel - ничего не делаем
+        }
+
+        private void ShowDateRangeDialog()
+        {
+            using (var dateForm = new DateRangeForm())
+            {
+                if (dateForm.ShowDialog() == DialogResult.OK)
+                {
+                    ReportsManager.GenerateFinancialReportByDate(dateForm.StartDate, dateForm.EndDate);
+                }
+            }
         }
 
         // === Окно ===
@@ -465,7 +383,7 @@ namespace Cinema_APP
             }
             else if (this.MdiChildren.Length == 0)
             {
-                UpdateStatus($"Готов ({Program.CurrentUserRole})");
+                UpdateStatus("Готов");
             }
         }
     }

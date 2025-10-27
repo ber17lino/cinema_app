@@ -47,6 +47,7 @@
             this.txtCategoryName.Name = "txtCategoryName";
             this.txtCategoryName.Size = new System.Drawing.Size(444, 22);
             this.txtCategoryName.TabIndex = 1;
+            this.txtCategoryName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtCategoryName_KeyDown);
 
             // lblRowStart
             this.lblRowStart.AutoSize = true;
@@ -76,6 +77,7 @@
             0,
             0,
             0});
+            this.numRowStart.ValueChanged += new System.EventHandler(this.numRowStart_ValueChanged);
 
             // lblRowEnd
             this.lblRowEnd.AutoSize = true;
@@ -105,6 +107,7 @@
             0,
             0,
             0});
+            this.numRowEnd.ValueChanged += new System.EventHandler(this.numRowEnd_ValueChanged);
 
             // lblBasePrice
             this.lblBasePrice.AutoSize = true;
